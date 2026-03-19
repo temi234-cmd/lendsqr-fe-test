@@ -95,7 +95,7 @@
     box-shadow: none;
     background: transparent;
     overflow: visible;
-    padding: 0 -16px;
+    padding: 0 16px; // ✅ fixed padding
   }
 }
 
@@ -107,12 +107,15 @@
 
   @media (max-width: $mobile) {
     display: block;
-    min-width: 100%;
+    min-width: 100%; // ✅ override min-width
     border-collapse: separate;
+
+    col {
+      width: auto !important; // ✅ reset column widths
+    }
   }
 
-  // Column widths that fit 1366px screen
-  // Available: 1366 - 283(sidebar) - 32(padding) = 1051px
+  // Column widths for desktop
   col:nth-child(1) { width: 14%; }
   col:nth-child(2) { width: 12%; }
   col:nth-child(3) { width: 20%; }
@@ -189,7 +192,9 @@
     padding: 16px 10px;
     font-size: 13px;
     color: $text-main;
-    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 0; // ✅ desktop only
 
     @media (max-width: $mobile) {
       display: flex;
@@ -197,6 +202,7 @@
       padding: 0;
       white-space: normal;
       word-break: break-word;
+      max-width: none; // ✅ reset for mobile
 
       &::before {
         content: attr(data-label);
@@ -210,265 +216,6 @@
         margin-right: 8px;
         flex-shrink: 0;
       }
-    }
-  }
-}
-
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 10px;
-  border-radius: 100px;
-  font-size: 11px;
-  font-weight: 500;
-
-  &--active {
-    background: $status-active-bg;
-    color: $status-active;
-  }
-  &--inactive {
-    background: $status-inactive-bg;
-    color: $status-inactive;
-  }
-  &--pending {
-    background: $status-pending-bg;
-    color: $status-pending;
-  }
-  &--blacklisted {
-    background: $status-blacklisted-bg;
-    color: $status-blacklisted;
-  }
-}
-
-.action-menu {
-  position: relative;
-
-  &__trigger {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background 0.15s;
-
-    @media (max-width: $mobile) {
-      width: 36px;
-      height: 36px;
-    }
-
-    &:hover { background: rgba($primary, 0.1); }
-  }
-
-  &__dropdown {
-    position: absolute;
-    right: 0;
-    top: 36px;
-    background: $white;
-    border-radius: $border-radius;
-    box-shadow: $shadow-dropdown;
-    border: 1px solid rgba($border, 0.5);
-    width: 180px;
-    z-index: 999;
-
-    @media (max-width: $mobile) {
-      width: 160px;
-      top: 40px;
-    }
-
-    .action-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 16px;
-      font-size: 14px;
-      color: $text-main;
-      cursor: pointer;
-      transition: background 0.15s;
-
-      @media (max-width: $mobile) {
-        padding: 12px 14px;
-        font-size: 13px;
-      }
-
-      &:hover {
-        background: rgba($primary, 0.05);
-        color: $primary-dark;
-      }
-    }
-  }
-}
-
-.filter-dropdown {
-  background: $white;
-  border-radius: $border-radius;
-  box-shadow: $shadow-dropdown;
-  border: 1px solid rgba($border, 0.5);
-  padding: 20px;
-  width: 270px;
-  position: absolute;
-  z-index: 100;
-  top: 50px;
-  left: 0;
-  max-height: 80vh;
-  overflow-y: auto;
-  
-  @media (max-width: $mobile) {
-    width: 90vw;
-    max-width: 300px;
-    left: auto;
-    right: 0;
-  }
-  
-  // Hide scrollbar visually but keep functionality
-  scrollbar-width: none; // Firefox
-  -ms-overflow-style: none; // IE/Edge
-  
-  &::-webkit-scrollbar {
-    display: none; // Chrome/Safari
-  }
-
-
-  .filter-field {
-    margin-bottom: 16px;
-
-    label {
-      display: block;
-      font-size: 12px;
-      color: $muted;
-      margin-bottom: 6px;
-      font-weight: 500;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid rgba($muted, 0.3);
-      border-radius: 6px;
-      font-size: 14px;
-      color: $text-dark;
-      outline: none;
-      background: $white;
-
-      &:focus { border-color: $primary; }
-      &::placeholder { color: $muted; }
-    }
-  }
-
-  .filter-actions {
-    display: flex;
-    gap: 12px;
-    margin-top: 20px;
-
-    button {
-      flex: 1;
-      padding: 10px;
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-
-      &.reset {
-        border: 1px solid $muted;
-        color: $text-main;
-        background: transparent;
-        &:hover { background: rgba($muted, 0.05); }
-      }
-
-      &.apply {
-        background: $primary;
-        color: $white;
-        border: none;
-        &:hover { opacity: 0.9; }
-      }
-    }
-  }
-}
-.pagination {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 0;
-  margin-top: 16px;
-  flex-wrap: wrap;
-  gap: 12px;
-
-  @media (max-width: $mobile) {
-    padding: 16px 0;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  &__info {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    color: $text-main;
-
-    @media (max-width: $mobile) {
-      width: 100%;
-      font-size: 12px;
-    }
-
-    select {
-      padding: 4px 8px;
-      border: none;
-      border-radius: 4px;
-      font-size: 14px;
-      color: $primary-dark;
-      background: #E5E8EE; 
-      outline: none;
-      font-weight: 600;
-      cursor: pointer;
-    }
-  }
-
-  &__controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    button {
-      min-width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      color: $text-main;
-      border: none;
-      background: transparent; // NO background
-      cursor: pointer;
-      transition: all 0.15s;
-      font-weight: 400;
-      padding: 0 4px;
-
-      &:hover:not(:disabled) {
-        color: $primary-dark;
-        font-weight: 600;
-      }
-
-      &.active {
-        color: $primary-dark;
-        font-weight: 700; // just bold, no background
-        background: transparent;
-      }
-
-      &:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-      }
-    }
-
-    .ellipsis {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: $muted;
-      font-size: 14px;
-      padding: 0 4px;
     }
   }
 }

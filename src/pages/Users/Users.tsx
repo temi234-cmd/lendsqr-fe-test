@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { mockUsers } from '../../data/mockUsers';
+import { fetchMockUsers } from '../../data/mockUsers';
 import { saveUserToStorage } from '../../utils/storage';
 import type { User } from '../../types';
 import './Users.scss';
@@ -9,11 +9,13 @@ const ITEMS_PER_PAGE_OPTIONS = [10, 20, 50, 100];
 
 const Users: React.FC = () => {
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [filteredUsers, setFilteredUsers] = useState<User[]>(mockUsers);
-  const [activeFilter, setActiveFilter] = useState<string | null>(null);
-  const [activeAction, setActiveAction] = useState<string | null>(null);
+const [allUsers, setAllUsers] = useState<User[]>([]);
+const [loading, setLoading] = useState(true);
+const [currentPage, setCurrentPage] = useState(1);
+const [itemsPerPage, setItemsPerPage] = useState(10);
+const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+const [activeFilter, setActiveFilter] = useState<string | null>(null);
+const [activeAction, setActiveAction] = useState<string | null>(null);
   const filterRef = useRef<HTMLDivElement>(null);
 const actionRef = useRef<HTMLDivElement>(null);
   const [filters, setFilters] = useState({
@@ -25,26 +27,33 @@ const actionRef = useRef<HTMLDivElement>(null);
     status: '',
   });
 
+// Fetch users
 useEffect(() => {
- const handleClickOutside = (e: MouseEvent) => {
-  if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
+  fetchMockUsers().then((users) => {
+    setAllUsers(users);
+    setFilteredUsers(users);
+    setLoading(false);
+  });
+}, []);
+
+// Event listeners
+useEffect(() => {
+  const handleClickOutside = (e: MouseEvent) => {
+    if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
+      setActiveFilter(null);
+    }
+    if (actionRef.current && !actionRef.current.contains(e.target as Node)) {
+      setActiveAction(null);
+    }
+  };
+
+  const handleScroll = (e: Event) => {
+    if (filterRef.current && filterRef.current.contains(e.target as Node)) {
+      return;
+    }
     setActiveFilter(null);
-  }
-  if (actionRef.current && !actionRef.current.contains(e.target as Node)) {
     setActiveAction(null);
-  }
-};
-
- const handleScroll = (e: Event) => {
-  // Don't close if scrolling inside the filter dropdown
-  if (filterRef.current && filterRef.current.contains(e.target as Node)) {
-    return;
-  }
-  setActiveFilter(null);
-  setActiveAction(null);
-};
-
-document.addEventListener('scroll', handleScroll, true);
+  };
 
   document.addEventListener('mousedown', handleClickOutside);
   document.addEventListener('scroll', handleScroll, true);
@@ -58,37 +67,37 @@ document.addEventListener('scroll', handleScroll, true);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentUsers = filteredUsers.slice(startIndex, startIndex + itemsPerPage);
 
-  const handleFilter = () => {
-    let result = mockUsers;
-    if (filters.organization)
-      result = result.filter(u =>
-        u.organization.toLowerCase().includes(filters.organization.toLowerCase())
-      );
-    if (filters.username)
-      result = result.filter(u =>
-        u.username.toLowerCase().includes(filters.username.toLowerCase())
-      );
-    if (filters.email)
-      result = result.filter(u =>
-        u.email.toLowerCase().includes(filters.email.toLowerCase())
-      );
-    if (filters.phoneNumber)
-      result = result.filter(u =>
-        u.phoneNumber.includes(filters.phoneNumber)
-      );
-    if (filters.status)
-      result = result.filter(u => u.status === filters.status);
-    setFilteredUsers(result);
-    setCurrentPage(1);
-    setActiveFilter(null);
-  };
+ const handleFilter = () => {
+  let result = allUsers;
+  if (filters.organization)
+    result = result.filter(u =>
+      u.organization.toLowerCase().includes(filters.organization.toLowerCase())
+    );
+  if (filters.username)
+    result = result.filter(u =>
+      u.username.toLowerCase().includes(filters.username.toLowerCase())
+    );
+  if (filters.email)
+    result = result.filter(u =>
+      u.email.toLowerCase().includes(filters.email.toLowerCase())
+    );
+  if (filters.phoneNumber)
+    result = result.filter(u =>
+      u.phoneNumber.includes(filters.phoneNumber)
+    );
+  if (filters.status)
+    result = result.filter(u => u.status === filters.status);
+  setFilteredUsers(result);
+  setCurrentPage(1);
+  setActiveFilter(null);
+};
 
-  const handleReset = () => {
-    setFilters({ organization: '', username: '', email: '', date: '', phoneNumber: '', status: '' });
-    setFilteredUsers(mockUsers);
-    setCurrentPage(1);
-    setActiveFilter(null);
-  };
+const handleReset = () => {
+  setFilters({ organization: '', username: '', email: '', date: '', phoneNumber: '', status: '' });
+  setFilteredUsers(allUsers);
+  setCurrentPage(1);
+  setActiveFilter(null);
+};
 
   const handleViewDetails = (user: User) => {
     saveUserToStorage(user);
@@ -197,6 +206,25 @@ const stats = [
     ),
   },
 ];
+if (loading) {
+  return (
+    <div className="users-page">
+      <h2>Users</h2>
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        padding: '60px',
+        color: '#9EA5B6',
+        fontSize: '14px'
+      }}>
+        Loading users...
+      </div>
+    </div>
+  );
+}
+
+
   return (
     <div className="users-page">
       <h2>Users</h2>
@@ -246,9 +274,9 @@ const stats = [
                           onChange={e => setFilters({ ...filters, organization: e.target.value })}
                         >
                           <option value="">Select</option>
-                          {[...new Set(mockUsers.map(u => u.organization))].map(org => (
-                            <option key={org} value={org}>{org}</option>
-                          ))}
+                        {[...new Set(allUsers.map(u => u.organization))].map(org => (
+  <option key={org} value={org}>{org}</option>
+))}
                         </select>
                       </div>
                       <div className="filter-field">
@@ -314,17 +342,17 @@ const stats = [
           <tbody>
             {currentUsers.map((user) => (
               <tr key={user.id} onClick={() => handleViewDetails(user)}>
-                <td data-label="Organization">{user.organization}</td>
-                <td data-label="Username">{user.username}</td>
-                <td data-label="Email">{user.email}</td>
-                <td data-label="Phone Number">{user.phoneNumber}</td>
-                <td data-label="Date Joined">{user.dateJoined}</td>
-                <td data-label="Status">
+                <td>{user.organization}</td>
+                <td>{user.username}</td>
+                <td>{user.email}</td>
+                <td>{user.phoneNumber}</td>
+                <td>{user.dateJoined}</td>
+                <td>
                   <span className={`status-badge status-badge--${user.status.toLowerCase()}`}>
                     {user.status}
                   </span>
                 </td>
-                <td data-label="Action" onClick={(e) => e.stopPropagation()}>
+                <td onClick={(e) => e.stopPropagation()}>
                   <div className="action-menu">
                     <div
                       className="action-menu__trigger"

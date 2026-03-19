@@ -55,11 +55,12 @@ input, select {
     min-height: calc(100vh - #{$navbar-height});
 
     @media (max-width: $tablet) {
-      margin-left: 0;
+      margin-left: 0; // remove sidebar margin on tablet
       padding: 20px;
     }
 
     @media (max-width: $mobile) {
+      margin-left: 0;
       padding: 16px;
     }
   }
