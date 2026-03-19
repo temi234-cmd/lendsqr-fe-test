@@ -1,22 +1,17 @@
 import type { User } from '../types';
 
 /**
- * Mock Users API Data
+ * Mock Users API
  * 
- * The mock API is hosted on mocky.io as per assessment requirements.
- * Update MOCK_API_URL below with your mocky.io endpoint.
- * 
- * Steps to create mocky.io endpoint:
- * 1. Go to https://mocky.io
- * 2. Click "Create"
- * 3. Paste the contents of public/mock-users.json
- * 4. Copy the generated URL and paste it below
+ * Serves 500 mock users from:
+ * - Development: Vite public folder + local fallback
+ * - Production: Vercel serverless API at /api/users
  */
 
-// UPDATE THIS WITH YOUR MOCKY.IO URL
-const MOCK_API_URL = 'https://run.mocky.io/v3/YOUR-ENDPOINT-ID';
+// API endpoint - works on both dev and production
+const API_URL = '/api/users';
 
-// Fallback to local JSON in case API is not set up
+// Fallback to local JSON in case API is not available
 import mockUsersData from '../../public/mock-users.json';
 
 let cachedUsers: User[] | null = null;
@@ -28,14 +23,12 @@ async function fetchMockUsers(): Promise<User[]> {
   }
 
   try {
-    // Try to fetch from mocky.io API
-    if (!MOCK_API_URL.includes('YOUR-ENDPOINT-ID')) {
-      const response = await fetch(MOCK_API_URL);
-      if (response.ok) {
-        const data = await response.json();
-        cachedUsers = data as User[];
-        return cachedUsers;
-      }
+    // Try to fetch from API endpoint
+    const response = await fetch(API_URL);
+    if (response.ok) {
+      const data = await response.json();
+      cachedUsers = data as User[];
+      return cachedUsers;
     }
   } catch (error) {
     console.warn('Failed to fetch from API, using local data:', error);
