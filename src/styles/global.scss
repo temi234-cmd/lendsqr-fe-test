@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap');
+@import './variables';
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+html, body {
+  font-family: $font-family;
+  font-size: $font-size-base;
+  color: $text-main;
+  background: $background;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  font-family: $font-family;
+  border: none;
+  background: none;
+}
+
+input, select {
+  font-family: $font-family;
+}
+
+.app-layout {
+  min-height: 100vh;
+  overflow-x: hidden;
+
+  .main-content {
+    margin-left: $sidebar-width;
+    margin-top: $navbar-height;
+    padding: 30px 16px;
+    background: $background;
+    min-height: calc(100vh - #{$navbar-height});
+
+    @media (max-width: $tablet) {
+      margin-left: 0;
+      padding: 20px;
+    }
+
+    @media (max-width: $mobile) {
+      padding: 16px;
+    }
+  }
+}

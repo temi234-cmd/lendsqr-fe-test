@@ -1,0 +1,38 @@
+// Colors
+$primary: #39CDCC;
+$primary-dark: #213F7D;
+$background: #FBFBFB;
+$white: #FFFFFF;
+$muted: #9EA5B6;
+$text-dark: #2B3045;
+$text-main: #545F7D;
+$border: #E0E0E0;
+
+// Status Colors
+$status-active: #39CD62;
+$status-active-bg: rgba(57, 205, 98, 0.06);
+$status-inactive: #545F7D;
+$status-inactive-bg: rgba(84, 95, 125, 0.06);
+$status-pending: #E9B200;
+$status-pending-bg: rgba(233, 178, 0, 0.06);
+$status-blacklisted: #E4033B;
+$status-blacklisted-bg: rgba(228, 3, 59, 0.06);
+
+// Shadows
+$shadow-card: 3px 5px 20px rgba(0, 0, 0, 0.04);
+$shadow-dropdown: 3px 5px 20px rgba(0, 0, 0, 0.1);
+
+// Typography
+$font-family: 'Work Sans', sans-serif;
+$font-size-sm: 12px;
+$font-size-base: 14px;
+$font-size-lg: 16px;
+
+// Layout
+$sidebar-width: 283px; 
+$navbar-height: 64px;
+$border-radius: 8px;
+
+// Breakpoints
+$mobile: 768px;
+$tablet: 1024px;

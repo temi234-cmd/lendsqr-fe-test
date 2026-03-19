@@ -1,0 +1,362 @@
+@import '../../styles/variables';
+
+.user-details {
+  text-align: left;
+
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: $text-main;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 24px;
+
+    @media (max-width: $mobile) {
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    &:hover { color: $primary-dark; }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    @media (max-width: $mobile) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: $primary-dark;
+
+      @media (max-width: $mobile) {
+        font-size: 20px;
+      }
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 16px;
+
+      @media (max-width: $mobile) {
+        width: 100%;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      button {
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        cursor: pointer;
+        background: transparent;
+        transition: opacity 0.2s;
+        white-space: nowrap;
+
+        @media (max-width: $mobile) {
+          padding: 10px 16px;
+          font-size: 11px;
+          flex: 1;
+        }
+
+        &:hover { opacity: 0.8; }
+        &.blacklist {
+          border: 1px solid $status-blacklisted;
+          color: $status-blacklisted;
+        }
+        &.activate {
+          border: 1px solid $primary;
+          color: $primary;
+        }
+      }
+    }
+  }
+
+  &__card {
+    background: $white;
+    border-radius: $border-radius;
+    box-shadow: $shadow-card;
+    margin-bottom: 16px;
+    overflow: hidden;
+
+    @media (max-width: $mobile) {
+      border-radius: 0;
+      box-shadow: none;
+      border-bottom: 1px solid rgba($border, 0.5);
+    }
+  }
+
+  &__content-card {
+    background: $white;
+    border-radius: $border-radius;
+    box-shadow: $shadow-card;
+    margin-bottom: 24px;
+    overflow: hidden;
+
+    @media (max-width: $mobile) {
+      border-radius: 0;
+      box-shadow: none;
+      border-bottom: 1px solid rgba($border, 0.5);
+    }
+  }
+
+  &__profile {
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0;
+    border-bottom: 1px solid rgba($border, 0.5);
+    flex-wrap: wrap;
+
+    @media (max-width: $tablet) {
+      padding: 24px 20px;
+      gap: 16px;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    @media (max-width: $mobile) {
+      padding: 20px 16px;
+      gap: 20px;
+    }
+
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      margin-right: 20px;
+      background: rgba($muted, 0.2);
+
+      @media (max-width: $tablet) {
+        margin-right: 0;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .profile-info {
+      padding-right: 32px;
+      flex-shrink: 0;
+
+      @media (max-width: $tablet) {
+        padding-right: 0;
+      }
+
+      h3 {
+        font-size: 22px;
+        font-weight: 700;
+        color: $primary-dark;
+        margin-bottom: 8px;
+
+        @media (max-width: $mobile) {
+          font-size: 18px;
+        }
+      }
+
+      p {
+        font-size: 14px;
+        color: $text-main;
+
+        @media (max-width: $mobile) {
+          font-size: 12px;
+        }
+      }
+    }
+
+    .profile-tier {
+      padding: 0 32px;
+      border-left: 1px solid rgba($border, 0.5);
+      flex-shrink: 0;
+
+      @media (max-width: $tablet) {
+        padding: 0;
+        border-left: none;
+      }
+
+      p {
+        font-size: 12px;
+        color: $text-main;
+        margin-bottom: 8px;
+      }
+
+      .stars {
+        display: flex;
+        gap: 2px;
+      }
+    }
+
+    .profile-account {
+      padding-left: 32px;
+      border-left: 1px solid rgba($border, 0.5);
+      flex-shrink: 0;
+
+      @media (max-width: $tablet) {
+        padding-left: 0;
+        border-left: none;
+      }
+
+      h4 {
+        font-size: 22px;
+        font-weight: 700;
+        color: $primary-dark;
+        margin-bottom: 8px;
+
+        @media (max-width: $mobile) {
+          font-size: 18px;
+        }
+      }
+
+      p {
+        font-size: 12px;
+        color: $text-main;
+      }
+    }
+  }
+
+  &__tabs {
+    display: flex;
+    padding: 0 32px;
+    border-bottom: 1px solid rgba($border, 0.5);
+    overflow-x: auto;
+    scrollbar-width: none;
+    
+    @media (max-width: $mobile) {
+      padding: 0 16px;
+    }
+
+    &::-webkit-scrollbar { display: none; }
+
+    .tab {
+      padding: 20px 16px;
+      font-size: 14px;
+      color: $text-main;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      font-weight: 400;
+      transition: all 0.15s;
+      margin-bottom: -1px;
+
+      @media (max-width: $mobile) {
+        padding: 16px 12px;
+        font-size: 12px;
+      }
+
+      &:hover { color: $primary; }
+
+      &.active {
+        color: $primary;
+        border-bottom-color: $primary;
+        font-weight: 500;
+      }
+    }
+  }
+
+  &__content {
+    padding: 32px;
+
+    @media (max-width: $tablet) {
+      padding: 24px 20px;
+    }
+
+    @media (max-width: $mobile) {
+      padding: 16px;
+    }
+  }
+
+  &__section {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba($border, 0.3);
+
+    &:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    h4 {
+      font-size: 16px;
+      font-weight: 500;
+      color: $primary-dark;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 32px 16px;
+
+    @media (max-width: $tablet) {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px 12px;
+    }
+
+    @media (max-width: $mobile) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px 12px;
+    }
+
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .detail-item {
+      label {
+        display: block;
+        font-size: 11px;
+        color: $muted;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+        font-weight: 500;
+
+        @media (max-width: $mobile) {
+          font-size: 10px;
+          letter-spacing: 0.5px;
+        }
+      }
+
+      p {
+        font-size: 15px;
+        color: $primary-dark;
+        font-weight: 500;
+        word-break: break-word;
+
+        @media (max-width: $mobile) {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px;
+    color: $muted;
+    font-size: 14px;
+  }
+}
